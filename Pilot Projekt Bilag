@@ -1,0 +1,81 @@
+var startTime;
+var isRunning = false;
+
+var counter = 0;
+var startDate = new Date("2020-08-16");
+var currentDate = new Date();
+var differenceInTime = currentDate.getTime()-startDate.getTime();
+var differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24));
+
+var extendCountDown = -3590+(300*differenceInDays);
+
+function countDown(){
+  if (!isRunning) {
+      isRunning = true;
+      counter +=1;
+      setText("counter","Pouches : " + counter);
+      startTime = getTime();
+      
+      timedLoop(1000, function() {
+        
+        var currentTime = getTime();
+        var elapsedTime = currentTime-startTime;
+        elapsedTime = Math.round(elapsedTime/1000);
+        var x = (3600+extendCountDown)-elapsedTime;
+        
+        var date = new Date(null);
+        date.setSeconds(x); // specify value for SECONDS here
+        var result = date.toISOString().substr(11, 8);
+        setText("cd", result);
+        
+        TotalConsumption();
+      
+      });
+      isRunning = false;
+  }
+}
+
+function SetViewHome(){
+  setScreen("counddown");
+    
+}
+function SetViewStats(){
+  setScreen("Stats");
+}
+function SetViewInfo(){
+  setScreen("Info");
+}
+var hoveredSnus = getText("dropdown")
+var currentNic = undefined;
+var snusArray = [9.8, 11.2, 11.2, 11.2]
+var nicDisplay = undefined;
+
+function TotalConsumption(){
+  if(hoveredSnus == "LYFT Ice Cool"){
+    currentNic = snusArray[0];
+  }
+  else if(hoveredSnus == "LYFT Freeze"){
+    currentNic = snusArray[1];
+  }
+  else if(hoveredSnus == "LYFT Winterchill"){
+    currentNic = snusArray[2];
+  }
+  else if(hoveredSnus == "LYFT Neon Static"){
+    currentNic = snusArray[3];
+  }
+  nicDisplay = Math.round(currentNic*counter*100)/100;
+  setText("TNC",nicDisplay.toString() + "mg");
+  
+}
+//TotalConsumption();
+onEvent("start_cd", "click", countDown);
+
+onEvent("homeFragment","click", SetViewHome);
+onEvent("statsFragment","click", SetViewStats);
+onEvent("infoFragment","click", SetViewInfo);
+onEvent("homeFragment1","click", SetViewHome);
+onEvent("statsFragment1","click", SetViewStats);
+onEvent("infoFragment1","click", SetViewInfo);
+onEvent("homeFragment2","click", SetViewHome);
+onEvent("statsFragment2","click", SetViewStats);
+onEvent("infoFragment2","click", SetViewInfo);
